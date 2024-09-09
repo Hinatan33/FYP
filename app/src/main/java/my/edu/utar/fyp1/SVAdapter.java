@@ -78,6 +78,12 @@ public class SVAdapter extends RecyclerView.Adapter<SVAdapter.ViewHolder> {
     public int getItemCount() {
         return allSportsVideos.size();
     }
+
+    public void setFilteredList(List<SportsVideo> filteredList) {
+        this.allSportsVideos = filteredList;
+        notifyDataSetChanged();
+    }
+
     /**
      * This inner class represents a ViewHolder that holds references to the views in the
      layout "video_view".

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- RecyclerView to display the list of videos -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/videosRv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:scrollbars="vertical"/>
+
+    <!-- FloatingActionButton to add new videos -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addVideos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/add_button"
+        android:contentDescription="@string/add_button"
+        android:tint="@android:color/white"
+        android:backgroundTint="@color/purple" />
+
+</RelativeLayout>

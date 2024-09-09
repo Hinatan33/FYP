@@ -2,7 +2,6 @@ package my.edu.utar.fyp1;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,18 +9,15 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 public class SVPlayer extends AppCompatActivity {
     // Initialize variables
@@ -79,13 +75,16 @@ public class SVPlayer extends AppCompatActivity {
                         getSupportActionBar().show();
                     }
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) videoPlayer.getLayoutParams();
+                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) videoPlayer.getLayoutParams();
                     params.width = params.MATCH_PARENT;
                     params.height = (int) ( 200 * getApplicationContext().getResources().getDisplayMetrics().density);
                     videoPlayer.setLayoutParams(params);
                     isFullScreen = false;
                 }else{
                     fullScreen.setImageDrawable(ContextCompat.getDrawable(SVPlayer.this, R.drawable.exitfullscreen));
+                    fullScreen.getLayoutParams().height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
+                    fullScreen.getLayoutParams().width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
+                    fullScreen.requestLayout();
                     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN
                             |View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                             |View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
@@ -93,7 +92,7 @@ public class SVPlayer extends AppCompatActivity {
                         getSupportActionBar().hide();
                     }
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) videoPlayer.getLayoutParams();
+                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) videoPlayer.getLayoutParams();
                     params.width = params.MATCH_PARENT;
                     params.height = params.MATCH_PARENT;
                     videoPlayer.setLayoutParams(params);
@@ -123,17 +122,23 @@ public class SVPlayer extends AppCompatActivity {
     //handle back button
     @Override
     public void onBackPressed() {
-        fullScreen.setVisibility(View.VISIBLE);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        getSupportActionBar().show();
-
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        int heightValue = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,220,getResources().getDisplayMetrics());
-        frameLayout.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,heightValue));
-        videoPlayer.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,heightValue));
-        int orientation = getResources().getConfiguration().orientation;
-        if(orientation == Configuration.ORIENTATION_PORTRAIT){
-            super.onBackPressed();
+        super.onBackPressed();
+        if (isFullScreen) {
+            fullScreen.setImageDrawable(ContextCompat.getDrawable(SVPlayer.this, R.drawable.fullscreen));
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().show();
+            }
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) videoPlayer.getLayoutParams();
+            params.width = params.MATCH_PARENT;
+            params.height = (int) (200 * getApplicationContext().getResources().getDisplayMetrics().density);
+            videoPlayer.setLayoutParams(params);
+            isFullScreen = false;
+        } else {
+            // Navigate back to the main activity
+            Intent intent = new Intent(SVPlayer.this, MainActivity.class);
+            startActivity(intent);
         }
     }
 }
